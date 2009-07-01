@@ -1,0 +1,334 @@
+* README for 'xxml.el'				allout -*- outline -*-
+
+.. Presentation.
+
+   Lennart Staflin's PSGML is a wonderful Emacs tool for editing SGML
+   files, these cover HTML and XML files as well.  `xxml.el' builds over
+   PSGML by providing highlighting features which I like better.  It also
+   provides commands for re-indentation of lines and refilling of entities,
+   in such a way that the SGML structure is visually restored or preserved.
+   `xxml.el' depends on SGML characters like `<'and `>' not being changed.
+
+   This file exists as `http://www.iro.umontreal.ca/~pinard/xxml/' in HTML
+   form, and within `http://www.iro.umontreal.ca/~pinard/xxml/xxml.tar.gz'
+   as a plain text `README'.  The distribution also contains administrative
+   files.  `http://www.iro.umontreal.ca/~pinard/xxml/xxml.el' repeats file
+   `xxml.el' from the distribution, but this is merely for convenience.
+   The SuSE distribution includes `xxml.el' within the `psgml' package.
+
+   `xxml.el' seems pretty usable as it stands, despite we know that some
+   problems remain, see below.  Please gently report problems, suggestions
+   or other comments to François Pinard, `mailto:pinard@iro.umontreal.ca'.
+
+.. Installation.
+
+   This code has been initially written for Emacs 20.3.11 and PSGML 1.1.5.
+   It seems to work now with Emacs 21.2.92 and PSGML 1.2.3, so I guess
+   it should work for intermediate versions as well.
+
+   When one uses Emacs to visit an SGML or HTML file, or even a DTD,
+   and with the proper setup, PSGML loads itself and installs a special
+   edition mode.  The idea is to modify this mechanic slightly, so the
+   `xxml.el' file gets loaded as well, to provide a few extra features.
+
+   Here is how I link this module from my `.emacs' file:
+
+	(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
+	(autoload 'html-mode "xxml" "Major mode to edit HTML files." t)
+	(autoload 'xxml-mode-routine "xxml")
+	(add-hook 'sgml-mode-hook 'xxml-mode-routine)
+
+.. Highlighting.
+
+. : Principles.
+
+    `xxml.el' goal, as far as highlighting goes, was first to give a
+    better appearance to opening tags though lightier separate coloring
+    for attribute names and values.  Closing tags colouring was unrelated
+    with opening tags, `xxml.el' rather recycle the colouring of angular
+    brackets from opening tags into the brackets of closing tags: brackets
+    `<' and `>' have a uniform color for all kind of tags, yet within tags,
+    colour gives a quick clue at the kind of tag.  We gain legibility.
+
+    Character entities, either symbolic, decimal or hexadecimal, are
+    rendered specially.  However, I prefer avoiding entities when easy
+    to do, favouring real characters instead.  In particular, `&nbsp' is
+    clumsy for the eye, while non breakable spaces can be used directly,
+    and are displayed as a grey underline.
+
+. : Recipe for usage.
+
+    Unbreakable spaces are easily produced with command `M-_', which
+    `xxml.el' adds to PSGML.
+
+. : Known problems.
+
+    A small problem is still unsolved.  The comment block containing PSGML
+    options, at end of file, is not always fontified on initial visit.
+    One has to revisit the file once more to get it right.  This is
+    strange, but innocuous, so I did not spend much time on this one.
+
+.. Indenting.
+
+. : Principles.
+
+    The indenting step has to be greater than zero, otherwise one needs a
+    deep and vivid knowledge of the associated DTD to quickly interpret
+    SGML code.  An indenting step of 2, which is implicit in SGML mode,
+    seems too aggressive on horizontal space, which is a precious resource.
+    Happily for us, the only intermediate value is quite acceptable.
+
+    There is a difficulty when closing tags appear far below opening
+    tags or when nesting is deep.  This difficulty is much eased out
+    by moving commands of PSGML mode (like `M-C-f', `M-C-b' or `M-C-u'
+    for a few useful ones), or by synoptic abilities of PSGML mode which
+    allow for visually folding parts of the SGML structure.
+
+    As there is no `M-C-q' command in PSGML for adequately re-indenting
+    all lines in the scope of an SGML element, as Emacs permits for LISP,
+    Perl or C statements or expressions, `xxml.el' provides one.
+
+    As indenting a lengthy text may take quite a while, a progress indicator
+    is updated every second or so.  The delay may be adjusted.
+
+. : Recipe for usage.
+
+    The `M-C-q' command finds out the smallest SGML element around the cursor
+    and reidents those lines.  If the cursor is close to the beginning of file,
+    it is likely that this command will indent more lines and be slower.  Since
+    this command relies on PSGML, best is to declare the DTD properly.
+
+    CHECK: The `M-C-q' command discovers which SGML element holds the
+    cursor, then re-indents all lines of this element, without otherwise
+    modifying the lines.  More lines are processed when the cursor is
+    located near the outside of the overall structure.  When the cursor is
+    at the beginning of the file, the whole file is processed.  Of course,
+    `xxml.el' depends on PSGML for analysing the text structure, so at
+    the time, the DTD ought to be correctly declared.
+
+    The command uses the default indentation step, but it may be overriden
+    through the usage of a prefix argument.  Value 0 forces the removal of all
+    indentation, making all tags appear flush with the left margin.  A negative
+    prefix argument flags that white lines around tags should get removed, in
+    which case the absolute value of the prefix argument is used as the
+    indentation step.
+
+    This command tries to split or merge lines as needed with the goal of
+    making the structural information very explicit, often at the expense of
+    vertical space.  Yet, all attributes are packed after the opening tag, all
+    on one possibly long line.  Reindentation has side effects under control of
+    user options.  It may for example remove end tags which are forbidden.
+
+    CHECK: Unless the command is prefixed, it manages so each tag gets
+    alone on its line.  This underlines the structural information even
+    more, as each tag is then indented separately.  If a tag spans many
+    lines because it has numerous attributes, they all get merged in a
+    single long line.  This may look strange, but it helps later analysis
+    for structural refilling, and the tag may also be exploded onto many
+    lines through any `M-q' command (see below).
+
+    CHECK: So, by default, the `M-C-q' command cuts lines around tags while
+    indenting, because experience taught us that this is the most useful
+    thing to do on average.  One has to use `C-u M-C-q' to inhibit cuts.
+
+. : Known problems.
+
+    While lines are being re-indented or re-cut, `xxml.el' makes a special
+    effort so suffix white space is not lost.  On the other hand,
+    re-indenting after cut removes all meaning to prefixes, and I do not
+    know if this creates a practical problem or not.  If yes, this is a
+    delicate problem with no evident solution.
+
+    Another difficulty is that cutting lines might introduce spurious
+    `#CDATA' holding only white space, where DTD just does not permit.
+    I vaguely remember diagnostics from `nsgmls' yielding me to think
+    that SGML is not that "free field" after all.  If some cuts are just
+    unwelcome, my approach may convey a serious problem.  With enough luck,
+    PSGML might give enough access to the digested DTD so cuts could be
+    inhibited, depending on the needs and spots in an SGML text.
+
+    Reordering of attributes sometimes mangle text, so I inactivated it.
+
+.. Refilling.
+
+. : Principles
+
+    About filling lines, SGML is not different from most languages.
+    There are many ways to tackle the problem and decide how to proceed.
+    `xxml.el' uses a few strong principles, for cutting down possibilities
+    and guiding decisions.
+
+    This command tries to get rid of whitespace, within preset left and right
+    margins, while leaving visual clues to the logical imbrication structure.
+    In SGML as well as for most languages, there is no single solution to the
+    refilling problem, so arbitrary guidelines have to be preset and followed.
+    Here are a few of those we selected:
+    - an increase of the margin means a deeper dive into the SGML structure;
+    - whitespace may be spared more agressively, as highlighting offers clues;
+    - start tags indentation is to be more prominent than for end tags;
+    - end tags are batched on one line exactly as their start tags have been;
+    - within text, marked annotations (like bold, say) are handled atomically;
+    - white lines are to be left alone if possible.
+
+    CHECK: A closing tag has to be either on the same horizontal line
+    as the corresponding opening tag, or else, it ought to be vertically
+    aligned with it.  This rules out the frequent habit of bunching many
+    opening tags at the beginning of a paragraph, then bunching them
+    in reverse order at the end of the paragraph, refilling everything
+    together.  All the contrary, this principle says that if opening tags
+    are bunched on a line, the closing tags have to be bunched on the
+    exact same line.  Another consequence is that a textual paragraph holds
+    annotations (an italic fragment, for example), refilling the paragraph
+    may not split the annotation on many lines, all spaces within the
+    annotation have to be locally considered as non breakable, as if the
+    annotation was some kind of structural super-word, matter of speaking.
+
+    CHECK: Some closing tags may be elided, as per the DTD.  When an
+    opening tag does not have an explicit corresponding closing tag, the
+    alignment rule above does not hold, because there is nothing to align.
+    Consequently, in such case, refilling may be a little more aggressive
+    and effective.
+
+    CHECK: Not everything is refilled.  Refilling ignores SGML comments
+    or SGML declarations.  I might change this if the need arises, but
+    I did not feel that need so far.  A distinction is needed between
+    structural refilling and textual refilling.  Some elements need their
+    CDATA unaltered, the most common example being `<pre>' within HTML,
+    so `xxml.el' should never blindly refill all textual data.
+
+    CHECK: Care has been taken for cursor to apparently stick with its
+    context while (indentation and) refilling goes on.  Cursor should
+    merely move over the wave.
+
+. : Recipe for usage.
+
+    The `M-q' command finds out the smallest SGML element around the
+    cursor, then does a structural refilling of all lines for this
+    element to the value of `fill-column', trying to find the most compact
+    layout which would respect both the edition margins and the refilling
+    principles.  If the cursor is close to the beginning of file, it is
+    likely that this command will refill more lines and be slower.
+
+    The command uses the default indentation step, but it may be overriden
+    through the usage of a prefix argument.  Value 0 forces the removal of
+    all indentation, making all tags appear flush with the left margin.
+    A negative prefix argument flags that white lines around tags should
+    get removed, in which case the absolute value of the prefix argument
+    is used as the indentation step.
+
+    Refilling has side effects under control of user few options.  It may for
+    example adjust the case of tag or attribute ids, yet if this is not done,
+    start tags and end tags still correspond if their id only differ by the
+    case used.  Refilling is also shy of modifying SGML comments or SGML
+    declarations, which have to be refilled "by hand", at least for now.
+
+    CHECK: The prefixed version of the same command, `C-u M-q', triggers
+    a more aggressive refilling, in which refilling is textual as well as
+    structural.  (An option exists for always forcing this aggressivity,
+    so command prefix may be omitted and still yield the same effect.)
+
+    CHECK: A simple heuristic makes usage much simpler.  If the cursor
+    is positioned within a text at the time of the `M-q' command, then
+    the filling goes textual without the need of prefixing the command.
+
+    CHECK: Since refilling depends heavily on correct indentation,
+    `xxml.el' does not take any chance, and refilling is always preceeded
+    by automatic re-indentation.  It is never required to separately
+    trigger indentation through a separate command.  It may take some more
+    time, but the results are more dependable.  It practically means that
+    the `M-q' command is sufficient in most situations.
+
+. : Known problems.
+
+    Trailing space on lines is not always removed while refilling.
+
+    The first line of a refilled text is not truncated when too long.
+
+    While refilling goes, tag names and attribute names are automatically
+    down-cased.  An option variable exists to inhibit this behaviour.
+    All `xxml.el' code tries to disregard case when recognising names,
+    so an opening tag and a closing tag may be seen as identical even
+    if written with different casing.  This is OK for SGML and HTML,
+    but I think I read that DSSSL cares about casing.  Some later option
+    might be needed for fine-tuning this aspect.
+
+    Checking whether if there is a closing tag for every opening tag
+    requires more CPU cycles, so it might require more time to refill a
+    big text.  Consequently, I generalised progress indicators so they
+    could be used for refilling as well as for indentation.  However,
+    because PSGML produces its own diagnostics while repositioning,
+    these were overrunning `xxml.el' progress indicators, I implemented
+    an ugly stunt meant to silence PSGML.
+
+    `is-breakable' should apply after (implied) end tag, and include <p>.
+
+    `is-splittable-before' not used anymore and so, no recently tested.
+
+    `is-splittable-after' has never been implemented, maybe not useful.
+
+    `is-shrink-wrappable' to be rethought and debugged, now inactive.
+
+.. Clean-up.
+
+. : Principles.
+
+    There is a lot of noise out there, especially in the realm of HTML.
+    Some people debug their HTML structures using lenient browsers rather
+    than good conformance tools.  A few HTML composition programs or
+    specialised editors, sometimes going as far as claiming themselves as
+    "experts", produce random abomination and garbage.  These should be
+    avoided like plague.
+
+    Before starting to work on an existing set of SGML files, like the
+    HTML of a Web site, one would ideally do a serious job merely to
+    clean out that site, and get a conforming set of well indented pages.
+    This is normally done once, and not required anymore as long as work
+    habits stay reasonable afterwards.
+
+. : Recipe for usage.
+
+    As cleaning is only needed when one takes a old site in charge, and not
+    afterwards, there is no short key binding for cleaning operations.
+
+    The command `M-x xxml-cleanup' currently does little.  It transforms
+    Microsoft end of lines into Unix end of lines and recodes character
+    entities representing a non breakable space to the Latin-1 character.
+    It also removes ClarisWorks specific garbage.
+
+    The command `C-u M-x xxml-cleanup' has the supplementary effect of
+    ensuring a file prolog and epilog.  Unless the file already declares
+    some DTD, the prolog will receive the value of `xxml-default-prolog'
+    when not nil.  The epilog gets edition options for PSGML.
+
+. : Known problems.
+
+    A lot is needed in the area of cleaning out HTML created by various
+    monsters.  I consider much more a relief than a problem that I was
+    not exposed to various garbage generators, long enough to need more
+    cleaning functions within `xxml.el'.  But surely, many are less lucky
+    than me, and may consider that `xxml.el' is lacking in this area.
+
+    For one, I'll surely add more cleaning functions if I ever need them.
+
+.. History.
+
+   I originally wrote `xxml.el' mainly for my associate Laurent and me,
+   for direct SGML (and HTML) editing.  Karl Eichwalder much helped me at
+   getting started with PSGML and with SGML matters in general, so I was
+   happy to give him a copy of `xxml.el'.  His suggestions and criticism
+   allowed for a quicker stabilisation of the package in its beginnings.
+
+   Debugging `xxml.el' has been a bit difficult, as it progressively relied
+   on a few Emacs features I was not very familiar with, and for which I
+   discovered and experimented strengths and limitations along the way.
+   I wrote once about `xxml.el' to the Gnits gang, and mailing lists for
+   SGMLtools et DocBook.  Someone wrote me he was working on a similar
+   project, which was announcing to be difficult without PSGML, on the
+   other hand, he said he correctly interfaced with Emacs "Speed bar",
+   which `xxml.el' (or rather I :-) is not familiar with.
+
+   Nowadays, I do not edit SGML as often as I used to, but Laurent
+   never stopped, he keeps telling me that he uses `xxml.el' heavily.
+   Refilling (and the automatic indentation going with it) is probably his
+   most heavily used command.  Highlighting is undoubtedly comfortable,
+   but yet, refilling is probably the main `xxml.el' feature for us.

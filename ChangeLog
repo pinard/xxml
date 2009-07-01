@@ -1,0 +1,58 @@
+2002-11-08  François Pinard  <pinard@iro.umontreal.ca>
+
+	* xxml.el (xxml-split-long-tags): Revert the 2002-11-05 change,
+	moving the equal sign back into xxml-value-regexp.  It breaks
+	to many other things.
+
+2002-11-07  François Pinard  <pinard@iro.umontreal.ca>
+
+	* xxml.el (xxml-html-highlight-tag-alist): And related.  Move
+	textually earlier so to avoid compilation diagnotics.
+
+2002-11-06  François Pinard  <pinard@iro.umontreal.ca>
+
+	* xxml.el (xxml-write-file-hooks-routine): New.
+
+2002-11-05  François Pinard  <pinard@iro.umontreal.ca>
+
+	* xxml.el: Change the first comment line so it is compliant with
+	Info node (elisp) Library Headers.
+	Reported by Stephen Eglen.
+
+	* xxml.el (xxml-font-lock-keywords): Used xxml- named variables
+	for all faces, so they could get overridden by users.
+	Reported by Karl Eichwalder.
+
+	* xxml.el (xxml-value-regexp, xxml-attribute-for-highlight):
+	Move the equal sign out of the regexp representing the value.
+	Reported by Julian Scheid.
+
+	* xxml.el: Various defvar and autoload declarations, against
+	warnings while byte-compiling.
+	(xxml-fill-region-sub): Added handle-text optional argument,
+	so the variable is not merely bound in the calling function.
+	(xxml-attempt-merge, xxml-shrink-wrap): Added terminated argument,
+	so the variable is not merely bound in the calling function.
+	Reported by Christoph Conrad.
+
+2002-11-04  François Pinard  <pinard@iro.umontreal.ca>
+
+	* Makefile: New.
+
+2001-08-29  François Pinard  <pinard@iro.umontreal.ca>
+
+	* xxml.el (xxml-setq-local): Accept multiple arguments.
+
+2001-07-16  Karl Eichwalder  <ke@suse.de>
+
+	* xxml.el: Provide xxml.
+	Reported by Karl Eichwalder.
+
+2000-02-11  François Pinard  <pinard@iro.umontreal.ca>
+
+	* xxml.el: Highlight - and _ in tags, as Glade uses these.
+	Also highlight XML declarative line.
+
+1999-05-26  François Pinard  <pinard@iro.umontreal.ca>
+
+	* fp-sgml.el: Initial writing, to be later renamed xxml.el.
