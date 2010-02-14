@@ -56,14 +56,14 @@ Principles
 ``xxml.el`` goal, as far as highlighting goes, was first to give a
 better appearance to opening tags though lighter separate coloring
 for attribute names and values.  Closing tags colouring was unrelated
-with opening tags, ``xxml.el`` rather recycle the colouring of angular
+with opening tags, ``xxml.el`` rather recycles the colouring of angular
 brackets from opening tags into the brackets of closing tags: brackets
 ``<`` and ``>`` have a uniform color for all kind of tags, yet within
 tags, colour gives a quick clue at the kind of tag.  We gain legibility.
 
 Character entities, either symbolic, decimal or hexadecimal, are
-rendered specially.  However, I prefer avoiding entities when easy to
-do, favouring real characters instead.  In particular, ``&nbsp`` is
+rendered specially.  However, I prefer avoiding entities when easily
+doable, favouring real characters instead.  In particular, ``&nbsp`` is
 clumsy for the eye, while non breakable spaces can be used directly, and
 are displayed as a grey underline.
 
@@ -93,18 +93,19 @@ code.  An indenting step of 2, which is implicit in SGML mode, seems too
 aggressive on horizontal space, which is a precious resource.  Happily
 for us, the only intermediate value is quite acceptable.
 
-There is a difficulty when closing tags appear far below opening tags
-or when nesting is deep.  This difficulty is much eased out by moving
-commands of PSGML mode (like ``M-C-f``, ``M-C-b`` or ``M-C-u`` for a few
-useful ones), or by synoptic abilities of PSGML mode which allow for
-visually folding parts of the SGML structure.
+There are editing difficulties when closing tags appear far below
+opening tags or when nesting is deep.  Genuine PSGML mode comes to
+the rescue through its moving commands (like ``M-C-f``, ``M-C-b`` or
+``M-C-u`` for a few useful ones), or throught its synoptic abilities
+which allow for visually folding parts of the SGML structure.
 
-As there is no ``M-C-q`` command in PSGML for adequately re-indenting
-all lines in the scope of an SGML element, as Emacs permits for LISP,
-Perl or C statements or expressions, ``xxml.el`` provides one.
+There is no ``M-C-q`` command in PSGML for adequately re-indenting all
+lines in the scope of an SGML element, as Emacs permits for LISP, Perl
+or C statements or expressions.  So ``xxml.el`` provides one.
 
-As indenting a lengthy text may take quite a while, a progress indicator
-is updated every second or so.  The delay may be adjusted.
+Indenting a lengthy text with ``xxml.el`` may take quite a while, a
+progress indicator is updated every second or so.  The delay may be
+adjusted.
 
 Recipe for usage
 ----------------
@@ -154,7 +155,7 @@ Known problems
 --------------
 
 While lines are being re-indented or re-cut, ``xxml.el`` makes a
-special effort so suffix white space is not lost.  On the other hand,
+special effort to protect suffix white space.  On the other hand,
 re-indenting after cut removes all meaning to prefixes, and I do not
 know if this creates a practical problem or not.  If yes, this is a
 delicate problem with no evident solution.
@@ -279,9 +280,9 @@ that DSSSL cares about casing.  Some later option might be needed for
 fine-tuning this aspect.
 
 Checking whether if there is a closing tag for every opening tag
-requires more CPU cycles, so it might require more time to refill a big
-text.  Consequently, I generalised progress indicators so they could be
-used for refilling as well as for indentation.  However, because PSGML
+requires more CPU cycles, so it might require more time to refill a
+big text.  Consequently, I generalised progress indicators so they
+could be used for refilling as well as for indentation.  However, PSGML
 produces its own diagnostics while repositioning, these were overrunning
 ``xxml.el`` progress indicators, I implemented an ugly stunt meant to
 silence PSGML.

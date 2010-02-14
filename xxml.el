@@ -1016,7 +1016,7 @@ More text after END, may be moved as well if no intervening whitespace."
 	(while (< (point) limit)
 	  (if (not (eolp))
 	      ;; If not at end of line, we ought to have skipped it as
-	      ;; intagible text.  In that case, just do it again.
+	      ;; intangible text.  In that case, just do it again.
 	      (end-of-line)
 	    (xxml-show-sparkle (point) limit)
 	    (skip-chars-backward " \t")
