@@ -14,8 +14,7 @@
         </fp:section>
 
         <fp:section title="Source files">
-          <fp:entry text="Browse" href="http://github.com/pinard/xxml"/>
-          <fp:entry text="Download" href="/archives"/>
+          <fp:entry text="Browse" href="https://github.com/pinard/xxml"/>
         </fp:section>
 
         <fp:section title="Development">

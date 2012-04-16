@@ -16,13 +16,14 @@ in such a way that the SGML structure is visually restored or preserved.
 ``xxml.el`` depends on SGML characters like ``<``and ``>`` not being
 changed.
 
-This documentation exists as http://xxml.progiciels-bpi.ca/index.html in
-HTML form, and within http://xxml.progiciels-bpi.ca/archives/xxml.tar.gz
-as a plain text ``README``.  The distribution also contains
-administrative files.  The URL http://xxml.progiciels-bpi.ca/xxml.el
-repeats file ``xxml.el`` from the distribution, but this is merely for
-convenience.  The SuSE distribution includes ``xxml.el`` within the
-``psgml`` package.
+This documentation exists as http://xxml.progiciels-bpi.ca/index.html
+in HTML form, or as a plain text `README file`__.  The distribution also
+contains administrative files.  The URL
+http://xxml.progiciels-bpi.ca/xxml.el repeats file ``xxml.el`` from
+the distribution, but this is merely for convenience.  The SuSE
+distribution includes ``xxml.el`` within the ``psgml`` package.
+
+__ https://github.com/pinard/xxml/blob/master/README
 
 ``xxml.el`` seems pretty usable as it stands, despite we know that some
 problems remain, see below.  Please gently report problems, suggestions
