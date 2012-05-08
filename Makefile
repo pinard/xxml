@@ -1,6 +1,8 @@
 PUBLISH = index.html xxml.el xxml.tar.gz
 DISTRIB = ChangeLog Makefile README THANKS xxml.el
 
+all:
+
 publish: $(PUBLISH)
 	chmod 644 $(PUBLISH)
 	rsync -e ssh -auzv $(PUBLISH) bor:w/xxml/
