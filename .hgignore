@@ -1,0 +1,7 @@
+syntax: glob
+*~
+admin/*
+archives/*
+GNUmakefile
+html-*
+web/notes/*
