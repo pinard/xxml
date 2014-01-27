@@ -22,11 +22,8 @@ ifneq "$(wildcard ~/etc/mes-sites/site.mk)" ""
 site: site-all
 
 package_name = xxml
-rootdir = $(HOME)/GitHub/xxml/web
 margin_color = "\#d1b7ff"
 caption_color = "\#d7ebc4"
-
-SITE_ROOT = 1
 
 include ~/etc/mes-sites/site.mk
 
